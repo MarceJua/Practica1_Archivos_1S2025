@@ -1,8 +1,26 @@
 import os
 from listas import *
+from tabulate import tabulate
 
 def limpiar_pantalla():
     os.system('cls' if os.name == 'nt' else 'clear')
+
+def mostrar_en_tabla(lista):
+    if isinstance(lista, ListaContigua) or isinstance(lista, ListaIndexada):
+        datos = [[i+1, elemento] for i, elemento in enumerate(lista.lista)]
+    else:
+        datos = []
+        actual = lista.cabeza
+        index = 1
+        while actual:
+            datos.append([index, actual.dato])
+            actual = actual.siguiente
+            index += 1
+    
+    if datos:
+        print(tabulate(datos, headers=["Índice", "Valor"], tablefmt="grid"))
+    else:
+        print("La lista está vacía.")
 
 def submenu(lista):
     while True:
@@ -18,11 +36,11 @@ def submenu(lista):
             elemento = input("Ingrese un elemento: ")
             lista.insertar(elemento)
         elif opcion == '2':
-            lista.mostrar()
+            mostrar_en_tabla(lista)
             elemento = input("Ingrese el elemento a eliminar: ")
             lista.eliminar(elemento)
         elif opcion == '3':
-            lista.mostrar()
+            mostrar_en_tabla(lista)
         elif opcion == '4':
             break
         else:
